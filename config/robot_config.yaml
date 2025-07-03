@@ -1,0 +1,44 @@
+robot:
+  name: "Jetson Robot"
+  version: "1.0"
+  
+camera:
+  device_id: 0
+  resolution:
+    width: 640
+    height: 480
+  fps: 30
+  
+motors:
+  left_motor:
+    pin1: 18
+    pin2: 19
+    pwm: 20
+  right_motor:
+    pin1: 21
+    pin2: 22
+    pwm: 23
+  pwm_frequency: 1000
+  
+sensors:
+  temperature:
+    type: "DHT22"
+    pin: 4
+    read_interval: 5.0
+    
+ai:
+  object_detection:
+    model_type: "yolo"
+    confidence_threshold: 0.5
+    nms_threshold: 0.4
+    
+power:
+  battery_monitor_pin: 35
+  low_battery_threshold: 11.0
+  shutdown_threshold: 10.5
+  
+logging:
+  level: "INFO"
+  file: "logs/robot.log"
+  max_size: "10MB"
+  backup_count: 5

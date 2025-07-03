@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  jetson-robot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: jetson-robot:latest
+    container_name: jetson-robot
+    
+    # Runtime configuration
+    runtime: nvidia
+    privileged: true
+    
+    # Environment variables
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=${DISPLAY}
+      - PYTHONPATH=/app
+      
+    # Volume mounts
+    volumes:
+      - ../src:/app/src
+      - ../config:/app/config
+      - ../scripts:/app/scripts
+      - ../logs:/app/logs
+      - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+    # Device access
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/video1:/dev/video1
+      - /dev/i2c-0:/dev/i2c-0
+      - /dev/i2c-1:/dev/i2c-1
+      - /dev/gpiomem:/dev/gpiomem
+      
+    # Network configuration
+    network_mode: host
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import cv2; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      
+    # Command override
+    command: /entrypoint.sh
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+
+  # Optional: Web interface service
+  robot-web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    image: jetson-robot-web:latest
+    container_name: jetson-robot-web
+    depends_on:
+      - jetson-robot
+    ports:
+      - "8080:8080"
+    environment:
+      - ROBOT_HOST=jetson-robot
+    restart: unless-stopped
+    profiles:
+      - web
+
+volumes:
+  robot-logs:
+    driver: local
