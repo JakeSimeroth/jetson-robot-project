@@ -1,0 +1,117 @@
+{
+  "garden": {
+    "plants": [
+      {
+        "id": "tomato_1",
+        "type": "tomato",
+        "location": [0, 0],
+        "water_schedule": "daily",
+        "optimal_moisture": 65,
+        "critical_moisture": 25
+      },
+      {
+        "id": "pepper_1", 
+        "type": "pepper",
+        "location": [1, 0],
+        "water_schedule": "daily",
+        "optimal_moisture": 60,
+        "critical_moisture": 20
+      },
+      {
+        "id": "basil_1",
+        "type": "basil", 
+        "location": [2, 0],
+        "water_schedule": "twice_daily",
+        "optimal_moisture": 70,
+        "critical_moisture": 30
+      }
+    ],
+    "area_size": [3, 1],
+    "watering_thresholds": {
+      "critical": 20.0,
+      "low": 35.0,
+      "optimal": 60.0
+    }
+  },
+  "hardware": {
+    "motors": {
+      "serial_port": "/dev/ttyUSB0",
+      "baudrate": 9600,
+      "max_speed": 0.8,
+      "safety_timeout": 2.0
+    },
+    "watering": {
+      "pump_pin": 18,
+      "valve_pin": 19,
+      "flow_sensor_pin": 20,
+      "max_pump_runtime": 300,
+      "min_water_level": 10.0
+    },
+    "sensors": {
+      "dht_pin": 22,
+      "soil_sensors": [
+        {"id": "tomato_1", "pin": 23},
+        {"id": "pepper_1", "pin": 24}, 
+        {"id": "basil_1", "pin": 25}
+      ]
+    },
+    "camera": {
+      "device_index": 0,
+      "resolution": [1920, 1080],
+      "fps": 30
+    }
+  },
+  "behavior": {
+    "patrol_interval": 300,
+    "water_check_interval": 60,
+    "communication_style": "friendly",
+    "learning_enabled": true,
+    "autonomous_watering": true,
+    "voice_announcements": true
+  },
+  "safety": {
+    "max_watering_time": 30,
+    "emergency_stop_enabled": true,
+    "low_water_threshold": 10.0,
+    "motor_timeout": 2.0,
+    "sensor_timeout": 30.0
+  },
+  "ai": {
+    "decision_interval": 60,
+    "learning_rate": 0.1,
+    "plant_care_models": {
+      "tomato": {
+        "optimal_temp_range": [18, 26],
+        "optimal_humidity_range": [60, 70],
+        "water_frequency": "daily",
+        "light_requirements": "high"
+      },
+      "pepper": {
+        "optimal_temp_range": [20, 28],
+        "optimal_humidity_range": [50, 65],
+        "water_frequency": "daily", 
+        "light_requirements": "high"
+      },
+      "basil": {
+        "optimal_temp_range": [20, 25],
+        "optimal_humidity_range": [40, 60],
+        "water_frequency": "twice_daily",
+        "light_requirements": "medium"
+      }
+    }
+  },
+  "communication": {
+    "speech": {
+      "enabled": true,
+      "voice_rate": 150,
+      "voice_volume": 0.8,
+      "personality": "friendly"
+    },
+    "notifications": {
+      "plant_status": true,
+      "watering_events": true,
+      "error_alerts": true,
+      "daily_summary": true
+    }
+  }
+}
